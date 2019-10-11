@@ -39,10 +39,6 @@ class Tree:
 
     def successor(self, node=None):
         # If requested node has no node to its right (no node is greater)
-        # we return None
-        if node.right is None:
-            return None
-
         # If requested node is None we return minimum by traversing from
         # root leftwards until Null pointer is reached -> than we output
         # the last visited node which is the minimum
@@ -52,19 +48,56 @@ class Tree:
 
             while node.left is not None:
                 node = node.left
+            # Return the key value of that node
+            return node
 
-        # Return the key value of that node
-            return node.key
+        # we have a single node in a tree
+        elif (node.left is None) and (node.right is None) and (node.parent is None):
+            return node
 
-        # Start at the next node right
-        node = node.right
+        # we return None
 
-        # Travers to the left until null pointer is reached
-        while node.left is not None:
-            node = node.left
+        # vsechny listy mensi nez root
+        elif node.right is None and node is self.root:
+            return None
 
-        # Return the key value of that node
-        return node.key
+        # jsem v leve casti a nemam praveho nasledovnika
+        elif node.right is None and node.key < node.parent.key:
+            return node.parent
+
+        elif node.right is None and node.parent.key < node.key:
+            while node.parent.key < node.key:
+
+                if node.parent is self.root:
+                    return None
+
+                node = node.parent
+
+            return node.parent
+
+        # All nodes are larger than root
+        elif node.left is None and node is self.root:
+            return node.right
+
+        elif node.left is None and node.parent.key > node.key:
+            if node.right is not None:
+                node = node.right
+                while node.left is not None:
+                    node = node.left
+                return node
+            else:
+                return node.parent
+
+        elif node.key < node.right.key:
+            # Start at the next node right
+            node = node.right
+
+            # Travers to the left until null pointer is reached
+            while node.left is not None:
+                node = node.left
+
+            # Return the key value of that node
+            return node
 
         """Return successor of the given node.
 
@@ -73,4 +106,4 @@ class Tree:
         If the argument is None, return the node with the smallest key.
         """
         # TODO: Implement
-        raise NotImplementedError
+        #raise NotImplementedError
