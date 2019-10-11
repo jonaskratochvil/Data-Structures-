@@ -38,10 +38,12 @@ class Tree:
                 node = node.right
 
     def successor(self, node=None):
-        # If requested node has no node to its right (no node is greater)
-        # If requested node is None we return minimum by traversing from
-        # root leftwards until Null pointer is reached -> than we output
-        # the last visited node which is the minimum
+        """
+         If requested node has no node to its right (no node is greater)
+         If requested node is None we return minimum by traversing from
+         root leftwards until Null pointer is reached -> than we output
+         the last visited node which is the minimum
+        """
         if node is None:
             # Start at root
             node = self.root
@@ -51,17 +53,15 @@ class Tree:
             # Return the key value of that node
             return node
 
-        # we have a single node in a tree
+        # we have a single node in a tree we return that key
         elif (node.left is None) and (node.right is None) and (node.parent is None):
             return node
 
-        # we return None
-
-        # vsechny listy mensi nez root
+        # root is the node with highest key
         elif node.right is None and node is self.root:
             return None
 
-        # jsem v leve casti a nemam praveho nasledovnika
+        # Iam in left tree part and there is no right node from me
         elif node.right is None and node.key < node.parent.key:
             return node.parent
 
@@ -75,13 +75,15 @@ class Tree:
 
             return node.parent
 
-        # All nodes are larger than root
+        # Root is the smallest key
         elif node.left is None and node is self.root:
             return node.right
 
         elif node.left is None and node.parent.key > node.key:
+
             if node.right is not None:
                 node = node.right
+
                 while node.left is not None:
                     node = node.left
                 return node
@@ -98,12 +100,3 @@ class Tree:
 
             # Return the key value of that node
             return node
-
-        """Return successor of the given node.
-
-        The successor of a node is the node with the next greater key.
-        Return None if there is no such node.
-        If the argument is None, return the node with the smallest key.
-        """
-        # TODO: Implement
-        #raise NotImplementedError
