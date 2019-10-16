@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-
 class Node:
     """Node in a binary tree `Tree`"""
 
@@ -9,7 +7,6 @@ class Node:
         self.left = left
         self.right = right
         self.parent = parent
-
 
 class Tree:
     """A simple binary search tree"""
@@ -38,12 +35,10 @@ class Tree:
                 node = node.right
 
     def successor(self, node=None):
-        """
-         If requested node has no node to its right (no node is greater)
-         If requested node is None we return minimum by traversing from
-         root leftwards until Null pointer is reached -> than we output
-         the last visited node which is the minimum
-        """
+        
+        base = self.root
+        
+        # If node is None return minimum
         if node is None:
             # Start at root
             node = self.root
@@ -52,51 +47,25 @@ class Tree:
                 node = node.left
             # Return the key value of that node
             return node
+        
+        # Make initialization of node
+        previous = None
+        
+        # We traverse tree starting from root and only update previous when we
+        # traverse to its eft part
+        while base is not None:
 
-        # we have a single node in a tree we return that key
-        elif (node.left is None) and (node.right is None) and (node.parent is None):
-            return node
-
-        # root is the node with highest key
-        elif node.right is None and node is self.root:
-            return None
-
-        # Iam in left tree part and there is no right node from me
-        elif node.right is None and node.key < node.parent.key:
-            return node.parent
-
-        elif node.right is None and node.parent.key < node.key:
-            while node.parent.key < node.key:
-
-                if node.parent is self.root:
-                    return None
-
-                node = node.parent
-
-            return node.parent
-
-        # Root is the smallest key
-        elif node.left is None and node is self.root:
-            return node.right
-
-        elif node.left is None and node.parent.key > node.key:
-
-            if node.right is not None:
-                node = node.right
-
-                while node.left is not None:
-                    node = node.left
-                return node
+            if base.key > node.key:
+                previous = base
+                base = base.left
             else:
-                return node.parent
+                base = base.right
+        
+        # If node is the biggest one from the whole tree return None
+        if previous is node:
+             return None 
 
-        elif node.key < node.right.key:
-            # Start at the next node right
-            node = node.right
+        # Return the successor
+        return previous
 
-            # Travers to the left until null pointer is reached
-            while node.left is not None:
-                node = node.left
 
-            # Return the key value of that node
-            return node
