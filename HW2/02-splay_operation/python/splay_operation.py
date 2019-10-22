@@ -56,6 +56,7 @@ class Tree:
             
             node.parent.parent, node.parent = node, node.parent.parent
 
+    # Changed after unsucess
     def lookup(self, key):
         """Look up the given key in the tree.
 
@@ -68,21 +69,28 @@ class Tree:
                 self.splay(node)
                 return self.root 
             if key < node.key:
+                pred = node
                 node = node.left
-                if node is not None:
-                    self.splay(node.parent)
+                # if node is not None:
+                #     self.splay(node.parent)
             else:
+                pred = node
                 node = node.right
-                if node is not None:
-                    self.splay(node.parent)
+                # if node is not None:
+                #     self.splay(node.parent)
+
+        self.splay(pred)
         return None
 
+    # Changed after unsucess
     def insert(self, key):
         """Insert key into the tree.
 
         If the key is already present, do nothing.
         """
         # TODO: Utilize splay suitably.
+        block = Tree
+
         if self.root is None:
             self.root = Node(key)
             return
@@ -93,13 +101,20 @@ class Tree:
                 if node.left is None:
                     node.left = Node(key, parent=node)
                     self.splay(node)
+                    block = False
+                    break
 
                 node = node.left
             else:
                 if node.right is None:
                     node.right = Node(key, parent=node)
                     self.splay(node)
+                    block = False
+                    break
                 node = node.right
+        # This happens when node is already present in tree
+        if block:
+            self.splay(node)
 
     def remove(self, key):
         """Remove given key from the tree.
@@ -114,13 +129,13 @@ class Tree:
 
                 node = node.left
 
-                if node is not None:
-                    self.splay(node.parent)
+                # if node is not None:
+                #     self.splay(node.parent)
             else:
                 node = node.right
 
-                if node is not None:
-                    self.splay(node.parent)
+                # if node is not None:
+                #     self.splay(node.parent)
 
         # Splay that node 
         self.splay(node)
@@ -134,6 +149,7 @@ class Tree:
                 
                 node.key = replacement.key
                 node = replacement
+                self.splay(node.parent)
             
             replacement = node.left if node.left is not None else node.right
 
